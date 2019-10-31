@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_58872_needit.needit_variables_lookup_si</api_name>
+        <client_callable>false</client_callable>
+        <description>Gather variables from the NeedIt form</description>
+        <name>needit_variables_lookup_si</name>
+        <script><![CDATA[var needit_variables_lookup_si = Class.create();
+needit_variables_lookup_si.prototype = {
+    initialize: function() {
+    },
+	
+	find_variables: function(item) {
+		var filter = 'sys_idIN=';
+		var variableSets = '';
+		
+		//grab the variable sets
+		var grVS = new GlideRecord("io_set_item");
+		grVS.addQuery("sc_cat_item", item);
+		grVS.query();
+		while (grVS.next()) {
+			variableSets += grVS.variable_set+",";
+		}
+		
+		//Grab all the variables that set on the form
+		var grVar = new GlideRecord("item_option_new");
+		grVar.addQuery("cat_item", item).addOrCondition("variable_set", "IN", variableSets);
+		grVar.query();
+		while (grVar.next()) {
+			filter += grVar.sys_id+",";
+		}
+		return filter;
+	},
+		
+    type: 'needit_variables_lookup_si'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-10-24 14:33:44</sys_created_on>
+        <sys_id>0ee2d737db600010db47ab7dca9619af</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>needit_variables_lookup_si</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sys_script_include_0ee2d737db600010db47ab7dca9619af</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-10-24 14:33:44</sys_updated_on>
+    </sys_script_include>
+</record_update>
